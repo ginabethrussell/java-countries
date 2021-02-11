@@ -54,7 +54,7 @@ public class CountryController
         countryRepository.findAll().iterator().forEachRemaining(countryList::add);
 
         List<Country> rtnList =  findCountries(countryList, c -> c.getName().charAt(0) == letter || Character.toLowerCase(c.getName().charAt(0)) == letter );
-
+        rtnList.sort((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 
