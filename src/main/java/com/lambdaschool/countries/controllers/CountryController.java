@@ -57,4 +57,21 @@ public class CountryController
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 
+    //http://localhost:2019/population/total
+    @GetMapping(value="/population/total", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationTotal()
+    {
+        List<Country> countryList = new ArrayList<>();
+        countryRepository.findAll().iterator().forEachRemaining(countryList::add);
+
+        long population = 0;
+        for (Country c : countryList)
+        {
+            population +=  c.getPopulation();
+        }
+        String rtnStr = "The Total Population is " + population;
+
+        return new ResponseEntity<>(rtnStr, HttpStatus.OK);
+    }
+
 }
