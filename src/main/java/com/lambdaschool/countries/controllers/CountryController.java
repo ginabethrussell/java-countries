@@ -74,4 +74,16 @@ public class CountryController
         return new ResponseEntity<>(rtnStr, HttpStatus.OK);
     }
 
+    //http://localhost:2019/population/min
+    @GetMapping(value="/population/min", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMin()
+    {
+        List<Country> countryList = new ArrayList<>();
+        countryRepository.findAll().iterator().forEachRemaining(countryList::add);
+
+        countryList.sort((c1, c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+        Country minCountry = countryList.get(0);
+        return new ResponseEntity<>(minCountry, HttpStatus.OK);
+    }
+
 }
