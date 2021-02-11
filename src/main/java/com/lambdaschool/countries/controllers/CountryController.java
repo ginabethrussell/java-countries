@@ -42,6 +42,7 @@ public class CountryController
         {
             System.out.println(c);
         }
+        countryList.sort((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
         return new ResponseEntity<>(countryList, HttpStatus.OK);
     }
 
@@ -96,5 +97,25 @@ public class CountryController
         countryList.sort((c1, c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
         Country maxCountry = countryList.get(0);
         return new ResponseEntity<>(maxCountry, HttpStatus.OK);
+    }
+
+    //http://localhost:2019/population/median
+    @GetMapping(value="/population/median", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMedian()
+    {
+        List<Country> countryList = new ArrayList<>();
+        countryRepository.findAll().iterator().forEachRemaining(countryList::add);
+
+        countryList.sort((c1, c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+        int size = countryList.size();
+        System.out.println("Size of table " + size);
+        int index = 0;
+        if (size % 2 == 0){
+            index = size/2;
+        }else {
+            index = Math.round(size/2);
+        }
+        Country medianCountry = countryList.get(index);
+        return new ResponseEntity<>(medianCountry, HttpStatus.OK);
     }
 }
